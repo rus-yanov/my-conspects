@@ -6,7 +6,7 @@ Big O                       -60
 Рекурсия                    -120
 Разделяй и властвуй         -155
 Быстрая сортировка          -186
-Хэш-таблицы                 -245
+Хэш-таблицы                 -240
 
 
 
@@ -198,45 +198,40 @@ static int findSum(int[] arr, int length) {
 // шаг 1 - метод swap
 
 // шаг 2 - разделение
-int partition(int arr[], int low, int high)
+int partition(int arr[], int first, int last)
 {
     // Choosing the pivot
-    int pivot = arr[high];
+    int pivot = arr[last];
 
-    // Index of smaller element and indicates
-    // the right position of pivot found so far
-    int i = (low - 1);
+    // Setting the wall
+    int wall = (first - 1);
 
-    for (int j = low; j <= high - 1; j++) {
+    for (int current = first; current < last; current++) {
 
         // If current element is smaller than the pivot
-        if (arr[j] < pivot) {
+        if (arr[current] < pivot) {
 
-            // Increment index of smaller element
-            i++;
-            swap(arr, i, j);
+            // Increment index of wall and do a swap
+            wall++;
+            swap(arr, wall, current);
         }
     }
-    swap(arr, i+1, high);
-    return (i + 1);
+    
+    swap(arr, wall + 1, last);
+    return (wall + 1);
 }
 
 // шаг 3 - сортировка
-// arr[] --> Array to be sorted,
-// low --> Starting index,
-// high --> Ending index
-void quickSort(int arr[], int low, int high)
+void quickSort(int arr[], int first, int last)
 {
-    if (low < high) {
+    if (first < last) {
 
-        // pivot is partitioning index, arr[p]
-        // is now at right place
-        int pivot = partition(arr, low, high);
+        // doing partition
+        int pivot = partition(arr, first, last);
 
-        // Separately sort elements before
-        // partition and after partition
-        quickSort(arr, low, pivot - 1);
-        quickSort(arr, pivot + 1, high);
+        // Separately sort elements before partition and after partition
+        quickSort(arr, first, pivot - 1);
+        quickSort(arr, pivot + 1, last);
     }
 }
 
