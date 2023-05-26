@@ -8,7 +8,7 @@ Big O                       -60
 Быстрая сортировка          -186
 Хэш-таблицы                 -240
 Поиск в ширину              -320
-Алгоритм дейкстры           -380
+Алгоритм дейкстры           -390
 
 
 
@@ -318,6 +318,7 @@ public class CashChecker {
 -----------------------------------------------------------------------------------------------
 
 ПОИСК В ШИРИНУ
+-алгоритм поиска кратчайшего пути в невзвешанном графе
 
 Граф
 -используются для моделирования связей между объектами
@@ -331,14 +332,22 @@ public class CashChecker {
 -определяет (1) существует ли путь от узла А к узлу В, если существует, то (2) как выглядит кратчайший
 -проходя по всем связям всех уровней друг за другом, можно рано или поздно найти путь
 -для соблючения очередности проверки уровней связей существует СД ОЧЕРЕДЬ(принцип FIFO)
+-проверенный элемент должен удаляться из очереди, иначе может возникнуть бесконечный цикл
 -время выполнения О(кол-во нодов + количество ребер)
+
+Направленный граф - отношения действуют только в одну сторону
+Ненаправленный граф - отношения для соседних узлов действуют в обе стороны
+
+Дерево - разновидность графа, в котором нет ребер, указывающих в обратном направлении
 
 Код:
 
 private static Map<String, List<String>> graph = new HashMap<>();
 
 private static boolean search(String name) {
+
     Queue<String> searchQueue = new ArrayDeque<>(graph.get(name));
+    
     // This list is how you keep track of which people you've searched before.
     List<String> searched = new ArrayList<>();
 
@@ -364,6 +373,7 @@ private static boolean personIsSeller(String name) {
 }
 
 public static void main(String[] args) {
+
     graph.put("you", Arrays.asList("alice", "bob", "claire"));
     graph.put("bob", Arrays.asList("anuj", "peggy"));
     graph.put("alice", Arrays.asList("peggy"));
@@ -378,3 +388,106 @@ public static void main(String[] args) {
 ------------------------------------------------------------------------------------------------
 
 АЛГОРИТМ ДЕЙКСТРЫ
+-алгоритм поиска кратчайшего пути (с наименьшей стоимостью) во взвешанном графе
+-работае только с НАПРАВЛЕННЫМИ АЦИКЛИЧЕСКИМИ ГРАФАМИ (DAG)
+
+состоит из 4х шагов:
+1. Найти узел с наименьшей стоимостью (то есть узел до которого можно добраться за минимальное время)
+2. Обновить стоимости соседей узла 
+3. Повторять пока это не будет сделано для всех узлов графа
+4. Вычислить итоговый путь
+
+В алгоритме Дейкстры каждому сегменту присваивается число (вес)
+Алгоритм находит путь с наименьшим суммарным весом
+
+Взвешанные графы
+-графы с весами
+-графы без весов называютмся невзвешанными
+
+Циклы во взвешанных графах
+-увеличивают суммарный вес пути
+!В ненаправленных графах каждое ребро добавляет цикл, поэтому алгоритм Дейксты с ними не работает!
+
+*Алгоритм Беллмана-Форда - находит кратчайший путь в графе, содержащем ребра с отрицательным весом
+
+
+Код:
+// Для реализации алгоритма Декстры понадобятся 3 хэш-таблицы: граф, стоимости, родители
+
+public class DijkstrasAlgorithm {
+    // the graph
+    private static Map<String, Map<String, Double>> graph = new HashMap<>();
+    private static List<String> processed = new ArrayList<>();
+
+    private static String findLowestCostNode(Map<String, Double> costs) {
+        Double lowestCost = Double.POSITIVE_INFINITY;
+        String lowestCostNode = null;
+
+        // Go through each node
+        for (Map.Entry<String, Double> node : costs.entrySet()) {
+            Double cost = node.getValue();
+            // If it's the lowest cost so far and hasn't been processed yet...
+            if (cost < lowestCost && !processed.contains(node.getKey())) {
+                // ... set it as the new lowest-cost node.
+                lowestCost = cost;
+                lowestCostNode = node.getKey();
+            }
+        }
+
+        return lowestCostNode;
+    }
+
+    public static void main(String[] args) {
+        graph.put("start", new HashMap<>());
+        graph.get("start").put("a", 6.0);
+        graph.get("start").put("b", 2.0);
+
+        graph.put("a", new HashMap<>());
+        graph.get("a").put("fin", 1.0);
+
+        graph.put("b", new HashMap<>());
+        graph.get("b").put("a", 3.0);
+        graph.get("b").put("fin", 5.0);
+
+        graph.put("fin", new HashMap<>());
+
+        // The costs table
+        Map<String, Double> costs = new HashMap<>();
+        costs.put("a", 6.0);
+        costs.put("b", 2.0);
+        costs.put("fin", Double.POSITIVE_INFINITY);
+
+        // the parents table
+        Map<String, String> parents = new HashMap<>();
+        parents.put("a", "start");
+        parents.put("b", "start");
+        parents.put("fin", null);
+
+        String node = findLowestCostNode(costs);
+        while (node != null) {
+            Double cost = costs.get(node);
+            // Go through all the neighbors of this node
+
+            Map<String, Double> neighbors = graph.get(node);
+
+            for (String n : neighbors.keySet()) {
+                double newCost = cost + neighbors.get(n);
+                // If it's cheaper to get to this neighbor by going through this node
+                if (costs.get(n) > newCost) {
+                    // ... update the cost for this node
+                    costs.put(n, newCost);
+                    // This node becomes the new parent for this neighbor.
+                    parents.put(n, node);
+                }
+            }
+            // Mark the node as processed
+            processed.add(node);
+
+            // Find the next node to process, and loop
+            node = findLowestCostNode(costs);
+        }
+
+        System.out.println("Cost from the start to each node:");
+        System.out.println(costs); // { a: 5, b: 2, fin: 6 }
+    }
+}
