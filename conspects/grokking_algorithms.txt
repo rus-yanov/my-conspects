@@ -9,8 +9,8 @@ Big O                       -60
 Хэш-таблицы                 -240
 Поиск в ширину              -320
 Алгоритм дейкстры           -390
-
-
+Жадные алгоритмы            -496
+Динамическое програм-е      -545
 
 
 
@@ -491,3 +491,55 @@ public class DijkstrasAlgorithm {
         System.out.println(costs); // { a: 5, b: 2, fin: 6 }
     }
 }
+-------------------------------------------------------------------------------------------------
+
+ЖАДНЫЕ АЛГОРИТМЫ
+-на каждом шаге выбирает оптимальный вариант
+
+Код:
+// цель: найти минимальный набор станций который покрывал бы все штаты
+public class SetCovering {
+    public static void main(String... args) {
+        var statesNeeded = new HashSet<>(Arrays.asList("mt", "wa", "or", "id", "nv", "ut", "ca", "az"));
+        var stations = new LinkedHashMap<String, Set<String>>();
+
+        stations.put("kone", new HashSet<>(Arrays.asList("id", "nv", "ut")));
+        stations.put("ktwo", new HashSet<>(Arrays.asList("wa", "id", "mt")));
+        stations.put("kthree", new HashSet<>(Arrays.asList("or", "nv", "ca")));
+        stations.put("kfour", new HashSet<>(Arrays.asList("nv", "ut")));
+        stations.put("kfive", new HashSet<>(Arrays.asList("ca", "az")));
+
+        var finalStations = new HashSet<String>();
+        while (!statesNeeded.isEmpty()) {
+            String bestStation = null;
+            var statesCovered = new HashSet<String>();
+
+            for (var station : stations.entrySet()) {
+                var covered = new HashSet<>(statesNeeded);
+                covered.retainAll(station.getValue());
+
+                if (covered.size() > statesCovered.size()) {
+                    bestStation = station.getKey();
+                    statesCovered = covered;
+                }
+            }
+            statesNeeded.removeIf(statesCovered::contains);
+
+            if (bestStation != null) {
+                finalStations.add(bestStation);
+            }
+        }
+        System.out.println(finalStations); // [ktwo, kone, kthree, kfive]
+    }
+}
+
+NP-полые задачи - задачи с вычислением каждого возможного решения и выбором минимального (кратчайшего)
+Например в задаче о коммивояжере при выборе следующего города следует выбирать ближайший из тех, что он не посещал, начать можно с произвольного города.
+
+Признаки NP-полых задач:
+*алгоритм быстро работает при малом количестве элементов, но сильно замедляется при увеличении их колличества
+*формулировка "все комбинации Х"
+*задачу невозможно разбить на подзадачи, приходится вычислять все варианты Х
+*в задаче встречается некоторое множество и она не имеет простого решения
+-------------------------------------------------------------------------------------------------
+ДИНАМИЧЕСКОЕ ПРОГРАММИРОВАНИЕ
