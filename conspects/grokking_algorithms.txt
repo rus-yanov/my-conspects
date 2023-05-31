@@ -602,6 +602,7 @@ public class SetCovering {
         System.out.println(finalStations); // [ktwo, kone, kthree, kfive]
     }
 }
+
 NP-полые задачи - задачи с вычислением каждого возможного решения и выбором минимального (кратчайшего)
 Например в задаче о коммивояжере при выборе следующего города следует выбирать ближайший из тех, что он не посещал, начать можно с произвольного города.
 
@@ -613,3 +614,66 @@ NP-полые задачи - задачи с вычислением каждог
 -------------------------------------------------------------------------------------------------
 
 ДИНАМИЧЕСКОЕ ПРОГРАММИРОВАНИЕ
+-применяется для оптимизации какой-либо характеристики при заданных ограничениях. Например, максимизировать стоимость отобранных предметов с ограничениями по емкости рюкзака
+-работает только в случаях, когда задача может быть разбитана на автономные подзадачи не зависящие друг от друга
+
+Как решать с помощью ДП?
+-строится таблица
+-значения ячеек таблице соответствует оптимизируемой характеристике
+-каждая ячейка соответствует подзадаче
+
+Код:
+// цель: найти слово из списка символы которого в своей последовательности максимально совпадают с введенным
+
+public class LongestCommonSubsequence {
+    public static void main(String[] args) {
+//        if (word_a[i] == word_b[j]) {
+//            cell[i][j] = cell[i - 1][j - 1] + 1;
+//        } else {
+//            cell[i][j] = Math.Max(cell[i - 1][j], cell[i][j - 1]);
+//        }
+
+        String wordA = "hish";
+        String wordB = "fish";
+
+        int[][] cell = new int[wordA.length()][wordB.length()];
+
+        for (int i = 0; i < wordA.length(); i++) {
+            for (int j = 0; j < wordB.length(); j++) {
+                // The letters match
+                if (wordA.charAt(i) == wordB.charAt(j)) {
+                    if (i > 0 && j > 0) {
+                        cell[i][j] = cell[i - 1][j - 1] + 1;
+                    } else {
+                        cell[i][j] = 1;
+                    }
+                } else {
+                    // The letters don't match.
+                    if (i == 0 && j > 0) {
+                        cell[i][j] = cell[i][j - 1];
+                    } else if (i > 0 && j == 0) {
+                        cell[i][j] = cell[i - 1][j];
+                    } else if (i > 0 && j > 0) {
+                        cell[i][j] = Math.max(cell[i - 1][j], cell[i][j - 1]);
+                    } else {
+                        cell[i][j] = 0;
+                    }
+                }
+            }
+        }
+
+        printResult(cell);
+//      [0, 0, 0, 1]
+//      [0, 1, 1, 1]
+//      [0, 1, 2, 2]
+//      [0, 1, 2, 3]
+
+    }
+
+    private static void printResult(int[][] arr) {
+        for (int[] row : arr) {
+            System.out.println(Arrays.toString(row));
+        }
+    }
+
+}
