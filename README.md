@@ -9,10 +9,10 @@
     <img src="https://m.media-amazon.com/images/I/51dFnALMavL._AC_UF1000,1000_QL80_.jpg" style="width:200px;height:240px;">
   </a>
   <a href="https://github.com/rus-yanov/my-conspects/blob/main/conspects/grokking_algorithms.txt">
-    <img src="https://images-na.ssl-images-amazon.com/images/I/61uUPXbhMxL.jpg" alt="Girl in a jacket" style="width:200px;height:240px;">
+    <img src="https://images-na.ssl-images-amazon.com/images/I/61uUPXbhMxL.jpg" style="width:200px;height:240px;">
   </a>
   <a href="https://github.com/rus-yanov/my-conspects/blob/main/conspects/Java%20persistence%20API%20%26%20Hibernate">
-    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.labirint.ru%2Fbooks%2F659623%2F&psig=AOvVaw23eQJX_wtb9q5VwY1-0pB9&ust=1689858524474000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNjI0NrrmoADFQAAAAAdAAAAABAS" alt="Girl in a jacket" style="width:200px;height:240px;">
+    <img src="https://img3.labirint.ru/rc/b726bff7b1dc5988a9d14d0e91fad6cd/363x561q80/books66/659623/cover.jpg?1564127193" style="width:200px;height:240px;">
   </a>
   
 </p>
