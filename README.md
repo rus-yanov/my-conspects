@@ -14,5 +14,8 @@
   <a href="https://github.com/rus-yanov/my-conspects/blob/main/conspects/Java%20persistence%20API%20%26%20Hibernate">
     <img src="https://img3.labirint.ru/rc/b726bff7b1dc5988a9d14d0e91fad6cd/363x561q80/books66/659623/cover.jpg?1564127193" style="width:200px;height:240px;">
   </a>
+  <a href="https://github.com/rus-yanov/my-conspects/blob/main/conspects/HF_Patterns>
+    <img src="https://learning.oreilly.com/library/cover/9781492077992/250w/" style="width:200px;height:240px;">
+  </a>
   
 </p>
